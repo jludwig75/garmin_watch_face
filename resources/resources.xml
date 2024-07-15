@@ -1,0 +1,8 @@
+<resources>
+    <fonts>
+        <!-- <font id="id_font_roboto_regular_80" filename="fonts/roboto_regular_80.fnt"/> -->
+        <font id="id_font_roboto_regular_32" filename="fonts/roboto_regular_32.fnt" filter=" ,0123456789ADFJMNOSTWabcdeghilnoprtuvy"/>
+        <font id="id_font_roboto_regular_56" filename="fonts/roboto_regular_56.fnt" filter="-0123456789"/>
+        <font id="id_font_roboto_regular_96" filename="fonts/roboto_regular_condensed_bold_96.fnt" filter=":0123456789"/>
+    </fonts>
+</resources>
