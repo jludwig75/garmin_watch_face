@@ -58,12 +58,12 @@ class WatchFaceView extends WatchUi.WatchFace {
             hour = 12;
         }
         var timeString = Lang.format("$1$:$2$", [hour, clockTime.min.format("%02d")]);
-        dc.drawText(width / 2, 27 * height / 100, font_96, timeString, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(width / 2, 25 * height / 100, font_96, timeString, Graphics.TEXT_JUSTIFY_CENTER);
 
         var meridian = clockTime.hour <= 12 ? "AM" : "PM";
         var color = clockTime.hour <= 12 ? Graphics.COLOR_YELLOW : Graphics.COLOR_BLUE;
-        dc.setColor(color, Graphics.COLOR_DK_GRAY);
-        dc.drawText(80 * width / 100, 65 * height / 100, Graphics.FONT_MEDIUM, meridian, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.setColor(color, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(80 * width / 100, 68 * height / 100, Graphics.FONT_MEDIUM, meridian, Graphics.TEXT_JUSTIFY_CENTER);
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_DK_GRAY);
 
         // Get and show the current heart rate
