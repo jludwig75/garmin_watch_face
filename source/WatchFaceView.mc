@@ -10,6 +10,7 @@ class WatchFaceView extends WatchUi.WatchFace {
     private var _font_date as FontResource?;
     private var _font_heart_rate as FontResource?;
     private var _font_time as FontResource?;
+    private var _heartIcon as BitmapResource?;
 
     function initialize() {
         WatchFace.initialize();
@@ -21,6 +22,7 @@ class WatchFaceView extends WatchUi.WatchFace {
         _font_date = WatchUi.loadResource($.Rez.Fonts.id_font_date) as FontResource;
         _font_time = WatchUi.loadResource($.Rez.Fonts.id_font_time) as FontResource;
         _font_heart_rate = WatchUi.loadResource($.Rez.Fonts.id_font_heart_rate) as FontResource;
+        _heartIcon = WatchUi.loadResource($.Rez.Drawables.heartIcon) as BitmapResource;
     }
 
     // Called when this View is brought to the foreground. Restore
@@ -31,10 +33,6 @@ class WatchFaceView extends WatchUi.WatchFace {
 
     // Update the view
     function onUpdate(dc as Dc) as Void {
-        var font_date = _font_date;
-        var font_time = _font_time;
-        var font_heart_rate = _font_heart_rate;
-
         var width = dc.getWidth();
         var height = dc.getHeight();
 
@@ -52,7 +50,7 @@ class WatchFaceView extends WatchUi.WatchFace {
         var date = Gregorian.info(Time.now(), Time.FORMAT_MEDIUM);
         var date_string = date.day_of_week + ", " + date.day.format("%u") + " " + date.month;
 
-        dc.drawText(width / 2, 11 * height / 100, font_date, date_string, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(width / 2, 11 * height / 100, _font_date, date_string, Graphics.TEXT_JUSTIFY_CENTER);
 
         // Get and show the current time
         var clockTime = System.getClockTime();
@@ -61,7 +59,7 @@ class WatchFaceView extends WatchUi.WatchFace {
             hour = 12;
         }
         var timeString = Lang.format("$1$:$2$", [hour, clockTime.min.format("%02d")]);
-        dc.drawText(width / 2, 25 * height / 100, font_time, timeString, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(width / 2, 25 * height / 100, _font_time, timeString, Graphics.TEXT_JUSTIFY_CENTER);
 
         // Get and show the current time merdian
         var meridian = clockTime.hour < 12 ? "AM" : "PM";
@@ -70,15 +68,23 @@ class WatchFaceView extends WatchUi.WatchFace {
         dc.drawText(77 * width / 100, 67 * height / 100, Graphics.FONT_MEDIUM, meridian, Graphics.TEXT_JUSTIFY_CENTER);
         dc.setColor(foregroundColor, backgroundColor);
 
-        // Get and show the current heart rate
         var heartRate = Activity.getActivityInfo().currentHeartRate;
+
+        // Draw a heart
+        var heartPositionX = 28 * width / 100;
+        if (heartRate != null && heartRate >= 100) {
+            heartPositionX = 25 * width / 100;
+        }
+        dc.drawBitmap(heartPositionX, 81 * height / 100, _heartIcon);
+
+        // Get and show the current heart rate
         var heartRateText = "";
-        if (heartRate) {
+        if (heartRate != null) {
             heartRateText = heartRate.format("%u");
         } else {
             heartRateText = "--";
         }
-        dc.drawText(width / 2, 73 * height / 100, font_heart_rate, heartRateText, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(width / 2, 73 * height / 100, _font_heart_rate, heartRateText, Graphics.TEXT_JUSTIFY_CENTER);
     }
 
     // Called when this View is removed from the screen. Save the
